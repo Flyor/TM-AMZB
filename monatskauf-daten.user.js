@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TM-AMZB
 // @namespace    https://github.com/Flyor
-// @version      1.8.0
+// @version      1.8.1
 // @description  Zeigt Monatskauf-Daten für alle Produkte auf Übersichtsseiten an
 // @author       Stonehiller Industries
 // @match        https://www.amazon.de/*
