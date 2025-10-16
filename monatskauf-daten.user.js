@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TM-AMZB
 // @namespace    https://github.com/Flyor
-// @version      1.8.2
+// @version      1.8.3
 // @description  Zeigt Monatskauf-Daten für alle Produkte auf Übersichtsseiten an
 // @author       Stonehiller Industries
 // @match        https://www.amazon.de/*
@@ -124,12 +124,107 @@
         return 'Daten nicht verfügbar';
     }
 
+    // Text verkürzen
+    function shortenMonthlySalesText(text) {
+        if (!text || text.includes('nicht verfügbar')) {
+            return text;
+        }
+        
+        // Extrahiere die Zahl und verkürze den Text
+        const numberMatch = text.match(/(\d+)\+/);
+        if (numberMatch) {
+            return `${numberMatch[1]}+ gekauft im letzten Monat`;
+        }
+        
+        // Fallback für andere Formate
+        return text.replace(/Mal im letzten Monat gekauft|gekauft Mal im letzten Monat/g, 'gekauft im letzten Monat');
+    }
+
+    // ASIN mit Copy-Button erstellen
+    function createASINDisplay(asin) {
+        const asinContainer = document.createElement('div');
+        asinContainer.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 2px 0;
+            font-size: 10px;
+            color: #666;
+        `;
+
+        const asinText = document.createElement('span');
+        asinText.textContent = `ASIN: ${asin}`;
+        asinText.style.cssText = `
+            font-family: monospace;
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        `;
+
+        const copyButton = document.createElement('button');
+        copyButton.textContent = '📋';
+        copyButton.title = 'ASIN kopieren';
+        copyButton.style.cssText = `
+            background: #007185;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 6px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: background 0.2s;
+        `;
+
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(asin).then(() => {
+                copyButton.textContent = '✅';
+                copyButton.style.background = '#28a745';
+                setTimeout(() => {
+                    copyButton.textContent = '📋';
+                    copyButton.style.background = '#007185';
+                }, 1000);
+            }).catch(() => {
+                // Fallback für ältere Browser
+                const textArea = document.createElement('textarea');
+                textArea.value = asin;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                copyButton.textContent = '✅';
+                copyButton.style.background = '#28a745';
+                setTimeout(() => {
+                    copyButton.textContent = '📋';
+                    copyButton.style.background = '#007185';
+                }, 1000);
+            });
+        });
+
+        copyButton.addEventListener('mouseenter', () => {
+            copyButton.style.background = '#005f73';
+        });
+
+        copyButton.addEventListener('mouseleave', () => {
+            copyButton.style.background = '#007185';
+        });
+
+        asinContainer.appendChild(asinText);
+        asinContainer.appendChild(copyButton);
+        
+        return asinContainer;
+    }
+
     // Monatskauf-Daten anzeigen
     function addMonthlySalesDisplay(monthlySalesText, asin) {
         // Prüfe, ob bereits eine Anzeige existiert
-        const existingDisplay = document.querySelector(`[data-asin="${asin}"] .monatskauf-display`);
+        const existingDisplay = document.querySelector(`[data-asin="${asin}"] .monatskauf-container`);
         if (existingDisplay) {
-            existingDisplay.textContent = monthlySalesText;
+            const salesDisplay = existingDisplay.querySelector('.monatskauf-display');
+            if (salesDisplay) {
+                salesDisplay.textContent = shortenMonthlySalesText(monthlySalesText);
+            }
             return;
         }
 
@@ -152,7 +247,15 @@
             priceContainer = productCard;
         }
 
-        // Erstelle das Anzeige-Element
+        // Erstelle den Haupt-Container
+        const mainContainer = document.createElement('div');
+        mainContainer.className = 'monatskauf-container';
+        mainContainer.style.cssText = `
+            margin: 4px 0;
+            z-index: 1000;
+        `;
+
+        // Erstelle das Monatskauf-Anzeige-Element
         const displayElement = document.createElement('div');
         displayElement.className = 'monatskauf-display';
         displayElement.style.cssText = `
@@ -163,13 +266,11 @@
             font-size: 11px;
             font-weight: bold;
             text-align: center;
-            margin: 4px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             border: 2px solid #4a5568;
             position: relative;
             overflow: hidden;
             display: inline-block;
-            z-index: 1000;
         `;
 
         // Füge einen subtilen Glanz-Effekt hinzu
@@ -198,15 +299,22 @@
             document.head.appendChild(style);
         }
 
-        displayElement.textContent = monthlySalesText;
+        displayElement.textContent = shortenMonthlySalesText(monthlySalesText);
 
-        // Füge das Element direkt nach dem Preis-Bereich hinzu
+        // Erstelle ASIN-Anzeige
+        const asinDisplay = createASINDisplay(asin);
+
+        // Füge beide Elemente zum Container hinzu
+        mainContainer.appendChild(displayElement);
+        mainContainer.appendChild(asinDisplay);
+
+        // Füge den Container VOR dem Preis-Bereich hinzu
         if (priceContainer && priceContainer !== productCard) {
-            // Füge nach dem Preis-Container hinzu
-            priceContainer.parentNode.insertBefore(displayElement, priceContainer.nextSibling);
+            // Füge vor dem Preis-Container hinzu
+            priceContainer.parentNode.insertBefore(mainContainer, priceContainer);
         } else {
             // Fallback: Füge am Anfang der Produktkarte hinzu
-            productCard.insertBefore(displayElement, productCard.firstChild);
+            productCard.insertBefore(mainContainer, productCard.firstChild);
         }
     }
 

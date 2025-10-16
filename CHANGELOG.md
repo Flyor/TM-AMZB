@@ -5,6 +5,37 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.3] - 2024-01-XX
+
+### 🚀 Verbesserte Benutzerfreundlichkeit!
+- **Position über dem Preis**: Monatskauf-Daten werden jetzt über dem Preis angezeigt
+- **Verkürzter Text**: Kompaktere Anzeige "xxx+ gekauft im letzten Monat"
+- **ASIN mit Copy-Button**: Einfaches Kopieren der ASIN mit einem Klick
+- **Bessere Übersicht**: Alles übersichtlich in einem Container organisiert
+
+### Hinzugefügt
+- **ASIN-Anzeige mit Copy-Button**:
+  - Zeigt ASIN in monospace-Schrift an
+  - 📋 Copy-Button mit visueller Bestätigung (✅)
+  - Funktioniert mit modernem Clipboard API und Fallback
+  - Hover-Effekte für bessere UX
+- **Text-Verkürzung**:
+  - Automatische Kürzung auf "xxx+ gekauft im letzten Monat"
+  - Intelligente Regex-Erkennung für verschiedene Formate
+  - Behält Fallback-Nachrichten unverändert
+
+### Verbessert
+- **Bessere Positionierung**: Container wird VOR dem Preis eingefügt
+- **Kompakteres Design**: Kleinere, übersichtlichere Anzeige
+- **Benutzerfreundlichkeit**: Ein-Klick-ASIN-Kopieren
+- **Visuelle Hierarchie**: Monatskauf-Daten oben, ASIN darunter
+
+### Technische Verbesserungen
+- Neue `shortenMonthlySalesText()` Funktion für Text-Verkürzung
+- Neue `createASINDisplay()` Funktion für ASIN mit Copy-Button
+- Verbesserte Container-Struktur mit `monatskauf-container`
+- Clipboard API mit Fallback für ältere Browser
+
 ## [1.8.2] - 2024-01-XX
 
 ### 🎯 Monatskauf-Daten direkt beim Preis!
