@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TM-AMZB
 // @namespace    https://github.com/Flyor
-// @version      1.8.0
+// @version      1.8.2
 // @description  Zeigt Monatskauf-Daten für alle Produkte auf Übersichtsseiten an
 // @author       Stonehiller Industries
 // @match        https://www.amazon.de/*
@@ -137,22 +137,39 @@
         const productCard = document.querySelector(`[data-asin="${asin}"]`);
         if (!productCard) return;
 
+        // Suche nach dem Preis-Bereich in der Produktkarte
+        let priceContainer = productCard.querySelector('.a-price-whole, .a-price .a-offscreen, .a-price-range, .a-price-symbol');
+        if (!priceContainer) {
+            // Fallback: Suche nach anderen Preis-Selektoren
+            priceContainer = productCard.querySelector('[class*="price"], [class*="Price"]');
+        }
+        if (!priceContainer) {
+            // Fallback: Suche nach dem Preis-Container
+            priceContainer = productCard.querySelector('.a-price');
+        }
+        if (!priceContainer) {
+            // Letzter Fallback: Verwende die Produktkarte selbst
+            priceContainer = productCard;
+        }
+
         // Erstelle das Anzeige-Element
         const displayElement = document.createElement('div');
         displayElement.className = 'monatskauf-display';
         displayElement.style.cssText = `
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
             font-weight: bold;
             text-align: center;
-            margin: 8px 0;
+            margin: 4px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             border: 2px solid #4a5568;
             position: relative;
             overflow: hidden;
+            display: inline-block;
+            z-index: 1000;
         `;
 
         // Füge einen subtilen Glanz-Effekt hinzu
@@ -183,8 +200,14 @@
 
         displayElement.textContent = monthlySalesText;
 
-        // Füge das Element zur Produktkarte hinzu
-        productCard.appendChild(displayElement);
+        // Füge das Element direkt nach dem Preis-Bereich hinzu
+        if (priceContainer && priceContainer !== productCard) {
+            // Füge nach dem Preis-Container hinzu
+            priceContainer.parentNode.insertBefore(displayElement, priceContainer.nextSibling);
+        } else {
+            // Fallback: Füge am Anfang der Produktkarte hinzu
+            productCard.insertBefore(displayElement, productCard.firstChild);
+        }
     }
 
     // Einzelne Produktkarte verarbeiten

@@ -5,6 +5,27 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] - 2024-01-XX
+
+### 🎯 Monatskauf-Daten direkt beim Preis!
+- **Bessere Positionierung**: Monatskauf-Daten werden jetzt direkt beim Preis angezeigt
+- **Keine Überlappung**: Verhindert, dass Daten hinter Werbung oder anderen Elementen verschwinden
+- **Kompakteres Design**: Kleinere, inline-Boxen statt große Blöcke am Ende der Karte
+- **Höhere z-index**: Stellt sicher, dass Daten immer sichtbar sind
+
+### Verbessert
+- **Intelligente Preis-Erkennung**: Sucht automatisch nach verschiedenen Preis-Selektoren
+- **Fallback-Strategien**: Mehrere Ansätze um den Preis-Bereich zu finden
+- **Kompaktere Anzeige**: Kleinere Boxen (4px padding statt 8px) für bessere Integration
+- **Inline-Display**: `display: inline-block` für bessere Positionierung
+- **Z-Index-Optimierung**: `z-index: 1000` verhindert Überlappungen
+
+### Technische Verbesserungen
+- Preis-Container-Erkennung mit mehreren Fallback-Strategien
+- Verbesserte Positionierung direkt nach dem Preis-Bereich
+- Kompakteres CSS-Design für bessere Integration
+- Höhere z-index-Werte für bessere Sichtbarkeit
+
 ## [1.8.0] - 2024-01-XX
 
 ### 🚀 Alle Produktkacheln verarbeiten!
