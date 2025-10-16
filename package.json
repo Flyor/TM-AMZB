@@ -1,0 +1,26 @@
+{
+  "name": "amazon-monatskauf-tampermonkey",
+  "version": "1.8.0",
+  "description": "Tampermonkey-Skript zur Anzeige der Monatskauf-Informationen auf Amazon.de",
+  "main": "amazon-monatskauf.user.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tampermonkey",
+    "amazon",
+    "userscript",
+    "monatskauf",
+    "sales-data"
+  ],
+  "author": "AI Assistant",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "local"
+  },
+  "bugs": {
+    "url": "local"
+  },
+  "homepage": "local"
+}

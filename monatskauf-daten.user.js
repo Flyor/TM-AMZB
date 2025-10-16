@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Monatskauf-Daten für Produktübersichten
-// @namespace    https://github.com/yourusername
+// @namespace    https://github.com/Flyor
 // @version      1.8.0
 // @description  Zeigt Monatskauf-Daten für alle Produkte auf Übersichtsseiten an
-// @author       Your Name
+// @author       Flyor
 // @match        https://www.amazon.de/*
 // @match        https://amazon.de/*
 // @grant        none
 // @run-at       document-idle
+// @downloadURL  https://github.com/Flyor/TM-AMZB/raw/main/monatskauf-daten.user.js
+// @updateURL    https://github.com/Flyor/TM-AMZB/raw/main/monatskauf-daten.user.js
 // ==/UserScript==
 
 (function() {

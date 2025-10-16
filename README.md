@@ -16,7 +16,7 @@ Ein Tampermonkey Script, das Monatskauf-Daten für alle Produkte auf Übersichts
 ### Automatische Installation (Empfohlen)
 Klicke auf den folgenden Link, um das Script direkt in Tampermonkey zu installieren:
 
-**[🔗 Script installieren](https://github.com/Flyor/monatskauf-daten-script/raw/main/monatskauf-daten.user.js)**
+**[🔗 Script installieren](https://github.com/Flyor/TM-AMZB/raw/main/monatskauf-daten.user.js)**
 
 ### Manuelle Installation
 1. Öffne Tampermonkey
